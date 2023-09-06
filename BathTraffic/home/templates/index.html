@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
+    <!--レスポンシブデザインの導入-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: serif, cursive; /* 行書体に変更 */
             text-align: center;
-            background-repeat: none;
+            background-repeat: none;     /*この下が背景画像の設定*/
             background-size: cover;
             background-position: center;
             background-image: url({% static "img/hinoki.jpg" %});
@@ -24,9 +25,9 @@
 
         /* コンテナのスタイル */
         .bath-container {
-            display: inline-block;
+            display: inline-block;/*枠の設定*/
             align-items: center; /* 中央揃え */
-            border: 2px solid #ccc;
+            border: 2px solid #ccc;/*枠の縁の設定*/
             border-radius: 5px;
             width: min(90%, 550px);
             height: fit-content;
@@ -34,10 +35,10 @@
             background-color: #E9B362; /* 背景色を設定 */
             position: relative; /* 相対位置指定 */
             padding-bottom: 0;
-            height: 500px;
-            box-shadow: 10px 10px 5px black;
-            border: 1px solid #000;
-            border-radius: 20px;
+            height: 500px; /*高さ*/
+            box-shadow: 10px 10px 5px black; /*枠の影の追加*/
+            border: 1px solid #000; /*枠の影*/
+            border-radius: 20px; /*枠の角の丸さ*/
         }
         
         /* 風呂名のスタイル */
@@ -89,13 +90,13 @@
             display: block;
         }
 
-        .ninn {
+        .ninn {   /*人のspanの設定*/
             display: block;
             margin-left: 50%;
             transform: translateY(-200px);
         }
 
-        .ninn h3 {
+        .ninn h3 {   /*人の位置設定*/
             font-size: 50px;
             display: inline-block;
             width: 20px;
@@ -103,6 +104,7 @@
             text-align: left;
         }
 
+        /*レスポンシブデザインの導入*/
         @media screen and (min-width: 611px) and (max-width: 1227px) {
             .count {
                 margin: 170px 0 0 150px;
