@@ -1,12 +1,15 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* タイトルのスタイル */
         h1 {
-            font-family: "行書体", cursive; /* 行書体に変更 */
+            font-size: 50px; /*フォントサイズ*/
+            font-family: "HG行書体", cursive; /* 行書体に変更 */
             text-align: center; /* タイトルを中央揃えにする */
         }
 
@@ -16,23 +19,44 @@
             justify-content: space-between; /* 左右に配置 */
             align-items: center; /* 中央揃え */
             padding: 20px; /* 余白を追加 */
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             border-radius: 5px;
             margin: 10px;
-            width: 48%; /* コンテナの幅を設定 */
+            width: 610px; /* コンテナの幅を設定 */
+            height: 610px; /*コンテナの縦を設定*/
             background-color: #E9B362; /* 背景色を設定 */
+            position: relative; /* 相対位置指定 */
         }
-
+        
         /* 風呂名のスタイル */
         h2 {
-            font-family: "行書体", cursive; /* 行書体に変更 */
+            font-family: "HG行書体", cursive; /* 行書体に変更 */
+            font-size: 60px; /*フォントサイズ*/
             text-align: center; /* テキストを中央揃えにする */
+            position: absolute; /* 絶対位置指定 */
+            top: 0; /* 上部に配置 */
+            left: 50%; /* 中央に配置 */
+            transform: translateX(-50%); /* 水平方向に中央揃え */
+        }
+
+        /* スマホだけに適用するCSS */
+        @media screen and ( max-width:1920px )
+        {
+            p
+            {
+                
+            }
         }
 
         /* 人数表示のスタイル */
         .count {
             font-size: 60px; /* 数値のフォントサイズを大きくする */
             text-align: center; /* テキストを中央揃えにする */
+            text-shadow:
+                -2px -2px 0 black,
+                2px -2px 0 black,
+                -2px 2px 0 black,
+                2px 2px 0 black; /* 影を追加して黒い縁取りを作成 */
         }
 
         /* 単位のスタイル */
@@ -59,12 +83,20 @@
     <h1>現在のお風呂の混雑状況</h1>
 
     <div style="display: flex; justify-content: space-between;">
+        
+        <!--画像の読み込み-->
+        <img src="{% static "img/hinoki.jpg" %}" width="100" height="100">
+
         <!-- 小風呂の人数を表示する枠 -->
         <div class="bath-container">
             <div>
                 <h2>小風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="small-bath-count" class="count">取得中... <span class="unit">人</span></p>
+                <p id="small-bath-count" class="count"></p>
+            </div>
+            <div>
+                <h3>人</h3>
+                <p class="unit"></p>
             </div>
         </div>
 
@@ -73,7 +105,11 @@
             <div>
                 <h2>大風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="large-bath-count" class="count">取得中... <span class="unit">人</span></p>
+                <p id="large-bath-count" class="count"></p>
+            </div>
+            <div>
+                <h3>人</h3>
+                <p class="unit"></p>
             </div>
         </div>
     </div>
@@ -101,7 +137,7 @@
 
             // HTMLに人数を表示し、条件に応じて数字の色を変更します
             const smallBathCountElement = document.getElementById("small-bath-count");
-            smallBathCountElement.textContent = `${smallBathCount}人`;
+            smallBathCountElement.textContent = `${smallBathCount}`;
             if (smallBathCount >= 0 && smallBathCount <= 2) {
                 smallBathCountElement.classList.add("green");
             } else if (smallBathCount >= 3 && smallBathCount <= 4) {
@@ -112,7 +148,7 @@
 
             // HTMLに人数を表示し、条件に応じて数字の色を変更します
             const largeBathCountElement = document.getElementById("large-bath-count");
-            largeBathCountElement.textContent = `${largeBathCount}人`;
+            largeBathCountElement.textContent = `${largeBathCount}`;
             if (largeBathCount >= 0 && largeBathCount <= 3) {
                 largeBathCountElement.classList.add("green");
             } else if (largeBathCount >= 4 && largeBathCount <= 6) {
