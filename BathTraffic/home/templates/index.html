@@ -2,121 +2,18 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <!-- Test Edit -->>
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
+
+    <!--レスポンシブデザインの導入-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: serif, cursive; /* 行書体に変更 */
-            text-align: center;
-            background-repeat: none;
-            background-size: cover;
-            background-position: center;
-            background-image: url({% static "img/hinoki.jpg" %});
-        }
 
-        /* タイトルのスタイル */
-        h1 {
-            font-family: "HG行書体", cursive; /* 行書体に変更 */
-            font-size: 50px; /*フォントサイズ*/
-            text-align: center; /* タイトルを中央揃えにする */
-        }
-
-        /* コンテナのスタイル */
-        .bath-container {
-            display: inline-block;
-            align-items: center; /* 中央揃え */
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            width: min(90%, 550px);
-            height: fit-content;
-            margin: 20px 2vw;
-            background-color: #E9B362; /* 背景色を設定 */
-            position: relative; /* 相対位置指定 */
-            padding-bottom: 0;
-            height: 500px;
-            box-shadow: 10px 10px 5px black;
-            border: 1px solid #000;
-            border-radius: 20px;
-        }
-        
-        /* 風呂名のスタイル */
-        h2 {
-            font-family: "HG行書体", cursive; /* 行書体に変更 */
-            font-size: 60px; /*フォントサイズ*/
-            text-align: center; /* テキストを中央揃えにする */
-            position: absolute; /* 絶対位置指定 */
-            top: 0; /* 上部に配置 */
-            left: 50%; /* 中央に配置 */
-            transform: translateX(-50%); /* 水平方向に中央揃え */
-            width: 100%;
-        }
-
-        /* 人数表示のスタイル */
-        .count {
-            font-size: 200px; /* 数値のフォントサイズを大きくする */
-            text-align: center; /* テキストを中央揃えにする */
-            width: 300px;
-            top: 20%;
-            margin: 170px 0 0 110px;
-            text-shadow:
-                -2px -2px 0 black,
-                2px -2px 0 black,
-                -2px 2px 0 black,
-                2px 2px 0 black; /* 影を追加して黒い縁取りを作成 */
-        }
-
-        /* 単位のスタイル */
-        .unit {
-            font-size: 14px; /* 単位のフォントサイズを調整 */
-            color: black !important; /* 人の色を黒に設定 */
-        }
-
-        /* 色付けのスタイル */
-        .green {
-            color: green;
-        }
-
-        .yellow {
-            color: yellow;
-        }
-
-        .red {
-            color: red;
-        }
-
-        #detailPeople {
-            display: block;
-        }
-
-        .ninn {
-            display: block;
-            margin-left: 50%;
-            transform: translateY(-200px);
-        }
-
-        .ninn h3 {
-            font-size: 50px;
-            display: inline-block;
-            width: 20px;
-            margin-right: 0;
-            text-align: left;
-        }
-
-        @media screen and (min-width: 611px) and (max-width: 1227px) {
-            .count {
-                margin: 170px 0 0 150px;
-            }
-        }
-
-        @media screen and (max-width: 611px) {
-            .count {
-                margin: 170px 0 0 calc(20% - 100px);
-            }
-        }
-    </style>
+    <!-- cssファイルの読み込み -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
-<body>
+<!-- 背景に画像を表示させる -->
+<body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
 
     <div id="detailPeople">
