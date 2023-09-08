@@ -1,80 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
-    <style>
-        /* タイトルのスタイル */
-        h1 {
-            font-family: "行書体", cursive; /* 行書体に変更 */
-            text-align: center; /* タイトルを中央揃えにする */
-        }
 
-        /* コンテナのスタイル */
-        .bath-container {
-            display: flex;
-            justify-content: space-between; /* 左右に配置 */
-            align-items: center; /* 中央揃え */
-            padding: 20px; /* 余白を追加 */
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin: 10px;
-            width: 48%; /* コンテナの幅を設定 */
-            background-color: #E9B362; /* 背景色を設定 */
-        }
+    <!--レスポンシブデザインの導入-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* 風呂名のスタイル */
-        h2 {
-            font-family: "行書体", cursive; /* 行書体に変更 */
-            text-align: center; /* テキストを中央揃えにする */
-        }
-
-        /* 人数表示のスタイル */
-        .count {
-            font-size: 60px; /* 数値のフォントサイズを大きくする */
-            text-align: center; /* テキストを中央揃えにする */
-        }
-
-        /* 単位のスタイル */
-        .unit {
-            font-size: 14px; /* 単位のフォントサイズを調整 */
-            color: black !important; /* 人の色を黒に設定 */
-        }
-
-        /* 色付けのスタイル */
-        .green {
-            color: green;
-        }
-
-        .yellow {
-            color: yellow;
-        }
-
-        .red {
-            color: red;
-        }
-    </style>
+    <!-- cssファイルの読み込み -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
-<body>
+<!-- 背景に画像を表示させる -->
+<body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
 
-    <div style="display: flex; justify-content: space-between;">
+    <div id="detailPeople">
         <!-- 小風呂の人数を表示する枠 -->
         <div class="bath-container">
-            <div>
+            <span>
                 <h2>小風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="small-bath-count" class="count">取得中... <span class="unit">人</span></p>
-            </div>
+                <p id="small-bath-count" class="count"></p>
+            </span>
+            <span class="ninn">
+                <h3>人</h3>
+                <p class="unit"></p>
+            </span>
         </div>
 
         <!-- 大風呂の人数を表示する枠 -->
         <div class="bath-container">
-            <div>
+            <span>
                 <h2>大風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="large-bath-count" class="count">取得中... <span class="unit">人</span></p>
-            </div>
+                <p id="large-bath-count" class="count"></p>
+            </span>
+            <span class="ninn">
+                <h3>人</h3>
+                <p class="unit"></p>
+            </span>
         </div>
     </div>
 
@@ -101,7 +66,7 @@
 
             // HTMLに人数を表示し、条件に応じて数字の色を変更します
             const smallBathCountElement = document.getElementById("small-bath-count");
-            smallBathCountElement.textContent = `${smallBathCount}人`;
+            smallBathCountElement.textContent = `${smallBathCount}`;
             if (smallBathCount >= 0 && smallBathCount <= 2) {
                 smallBathCountElement.classList.add("green");
             } else if (smallBathCount >= 3 && smallBathCount <= 4) {
@@ -112,7 +77,7 @@
 
             // HTMLに人数を表示し、条件に応じて数字の色を変更します
             const largeBathCountElement = document.getElementById("large-bath-count");
-            largeBathCountElement.textContent = `${largeBathCount}人`;
+            largeBathCountElement.textContent = `${largeBathCount}`;
             if (largeBathCount >= 0 && largeBathCount <= 3) {
                 largeBathCountElement.classList.add("green");
             } else if (largeBathCount >= 4 && largeBathCount <= 6) {
