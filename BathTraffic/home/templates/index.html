@@ -1,8 +1,6 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <!-- Test Edit -->
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
 
@@ -11,8 +9,15 @@
 
     <!-- cssファイルの読み込み -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+        <!-- PWAの実装 -->
+	<link rel="manifest" href="static/manifest.json">
+	<script>
+		if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function() { console.log('Service Worker Registered'); });
+			}
+	</script>
+		<!-- ここまで -->
 </head>
-<!-- 背景に画像を表示させる -->
 <body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
 

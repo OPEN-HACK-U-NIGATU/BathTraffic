@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,3 +125,10 @@ STATIC_ROOT = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#STATICFILES_DIRS は Django アプリケーション内の静的ファイルの配置場所を指定します.
+#BASE_DIR は Django プロジェクトのルートディレクトリを示します.
+#'static' は静的ファイルが配置されているディレクトリの名前です.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
