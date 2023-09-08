@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+    <meta charset="UTF-8">
+    <title>お風呂の混雑状況</title>
+
+    <!--レスポンシブデザインの導入-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- cssファイルの読み込み -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
         <!-- PWAの実装 -->
 	<link rel="manifest" href="static/manifest.json">
 	<script>
@@ -11,7 +18,35 @@
 	</script>
 		<!-- ここまで -->
 </head>
-<body>
-	<h1></h1>
+<body background="{% static 'img/hinoki.jpg' %}">
+    <h1>現在のお風呂の混雑状況</h1>
+
+    <div id="detailPeople">
+        <!-- 小風呂の人数を表示する枠 -->
+        <div class="bath-container">
+            <span>
+                <h2>小風呂</h2>
+                <!-- 人数表示に色のクラスを追加 -->
+                <p id="small-bath-count" class="count {{ small.color }}">{{ small.count }}</p>
+            </span>
+            <span class="ninn">
+                <h3>人</h3>
+                <p class="unit"></p>
+            </span>
+        </div>
+
+        <!-- 大風呂の人数を表示する枠 -->
+        <div class="bath-container">
+            <span>
+                <h2>大風呂</h2>
+                <!-- 人数表示に色のクラスを追加 -->
+                <p id="large-bath-count" class="count {{ large.color }}">{{ large.count }}</p>
+            </span>
+            <span class="ninn">
+                <h3>人</h3>
+                <p class="unit"></p>
+            </span>
+        </div>
+    </div>
 </body>
 </html>
