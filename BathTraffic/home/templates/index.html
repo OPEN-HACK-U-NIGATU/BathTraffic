@@ -11,7 +11,7 @@
     <!-- cssファイルの読み込み -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
         <!-- PWAの実装 -->
-	<link rel="manifest" href="static/manifest.json">
+	<link rel="manifest" href="{% static 'manifest.json' %}">
 	<script>
 		if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(function() { console.log('Service Worker Registered'); });
