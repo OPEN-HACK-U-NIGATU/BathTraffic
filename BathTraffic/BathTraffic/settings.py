@@ -130,7 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #BASE_DIR は Django プロジェクトのルートディレクトリを示します.
 #'static' は静的ファイルが配置されているディレクトリの名前です.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'home/static'),
 )
 
 STATIC_ROOT = '/path/to/your/static/directory/'
