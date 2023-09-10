@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
@@ -10,8 +10,15 @@
 
     <!-- cssファイルの読み込み -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+        <!-- PWAの実装 -->
+	<link rel="manifest" href="static/manifest.json">
+	<script>
+		if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function() { console.log('Service Worker Registered'); });
+			}
+	</script>
+		<!-- ここまで -->
 </head>
-<!-- 背景に画像を表示させる -->
 <body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
 
@@ -21,7 +28,7 @@
             <span>
                 <h2>小風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="small-bath-count" class="count"></p>
+                <p id="small-bath-count" class="count {{ small.color }}">{{ small.count }}</p>
             </span>
             <span class="ninn">
                 <h3>人</h3>
@@ -34,7 +41,7 @@
             <span>
                 <h2>大風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="large-bath-count" class="count"></p>
+                <p id="large-bath-count" class="count {{ large.color }}">{{ large.count }}</p>
             </span>
             <span class="ninn">
                 <h3>人</h3>
@@ -42,53 +49,5 @@
             </span>
         </div>
     </div>
-
-    <!-- JavaScriptを読み込みます -->
-    <script>
-        // サーバーから小風呂の人数を取得する関数（仮の実装）
-        function fetchSmallBathCount() {
-            // ここで実際のデータを取得する通信を行います
-            // この例では仮の数値を返します
-            return 2;
-        }
-
-        // サーバーから大風呂の人数を取得する関数（仮の実装）
-        function fetchLargeBathCount() {
-            // ここで実際のデータを取得する通信を行います
-            // この例では仮の数値を返します
-            return 7;
-        }
-
-        // 小風呂と大風呂の人数を表示する関数
-        function displayBathCounts() {
-            const smallBathCount = fetchSmallBathCount(); // 小風呂の人数を取得
-            const largeBathCount = fetchLargeBathCount(); // 大風呂の人数を取得
-
-            // HTMLに人数を表示し、条件に応じて数字の色を変更します
-            const smallBathCountElement = document.getElementById("small-bath-count");
-            smallBathCountElement.textContent = `${smallBathCount}`;
-            if (smallBathCount >= 0 && smallBathCount <= 2) {
-                smallBathCountElement.classList.add("green");
-            } else if (smallBathCount >= 3 && smallBathCount <= 4) {
-                smallBathCountElement.classList.add("yellow");
-            } else if (smallBathCount >= 5 && smallBathCount <= 6) {
-                smallBathCountElement.classList.add("red");
-            }
-
-            // HTMLに人数を表示し、条件に応じて数字の色を変更します
-            const largeBathCountElement = document.getElementById("large-bath-count");
-            largeBathCountElement.textContent = `${largeBathCount}`;
-            if (largeBathCount >= 0 && largeBathCount <= 3) {
-                largeBathCountElement.classList.add("green");
-            } else if (largeBathCount >= 4 && largeBathCount <= 6) {
-                largeBathCountElement.classList.add("yellow");
-            } else if (largeBathCount >= 7 && largeBathCount <= 8) {
-                largeBathCountElement.classList.add("red");
-            }
-        }
-
-        // ページが読み込まれたときに人数を表示
-        window.onload = displayBathCounts;
-    </script>
 </body>
 </html>

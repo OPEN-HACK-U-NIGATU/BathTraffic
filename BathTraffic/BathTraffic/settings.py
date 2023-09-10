@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,6 @@ SECRET_KEY = 'django-insecure-vflno4@l#xhc7d!9=ewvh3l_@84ku(^-ppehxvamc3k5g6ze90
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -117,8 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 import os
-
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 #STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = [os.path.join(BASE_DIR, 'static')]
 
@@ -126,3 +125,12 @@ STATIC_ROOT = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#STATICFILES_DIRS は Django アプリケーション内の静的ファイルの配置場所を指定します.
+#BASE_DIR は Django プロジェクトのルートディレクトリを示します.
+#'static' は静的ファイルが配置されているディレクトリの名前です.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+STATIC_ROOT = '/path/to/your/static/directory/'
