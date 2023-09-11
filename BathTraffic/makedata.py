@@ -13,24 +13,21 @@ def generate_bath_data(hour):
 
     return small_number, big_number
 
-def date_data(hour):
-    now = datetime.now()
-    random_date = now - timedelta(days=random.randint(1, 30))
-    random_minute = random.randint(1, 59)
-    random_second = random.randint(1, 59)
-    
-    return random_date.replace(
-        hour=hour,
-        minute=random_minute,
-        second=random_second
-    )
-
 # ダミーデータの生成とデータベースへの挿入
 for hour in range(16, 24):  # 16:00から23:00まで
     small_number, big_number = generate_bath_data(hour)
     
     # 過去の日時をランダムに生成
-    past_time = date_data(hour)
+    now = datetime.now()
+    random_date = now - timedelta(days=random.randint(1, 30))
+    random_minute = random.randint(1, 59)
+    random_second = random.randint(1, 59)
+    
+    past_time = random_date.replace(
+        hour=hour,
+        minute=random_minute,
+        second=random_second
+    )
     
     snapshot = Snapshot.objects.create(
         small_number=small_number,
