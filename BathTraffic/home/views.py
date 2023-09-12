@@ -30,6 +30,7 @@ def home(request):
         "small": small
     })
 
+'''
 #グラフ用の関数
 # views.py
 from django.shortcuts import render
@@ -48,3 +49,4 @@ def chart_view(request):
     }
 
     return render(request, 'index.html', context)
+'''
