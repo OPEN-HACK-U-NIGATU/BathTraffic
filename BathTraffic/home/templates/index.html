@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>お風呂の混雑状況</title>
@@ -10,10 +10,25 @@
 
     <!-- cssファイルの読み込み -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+    <!-- Chart.jsのスクリプトを読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PWAの実装 -->
+	<link rel="manifest" href="{% static 'manifest.json' %}">
+	<script>
+		if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(function() { console.log('Service Worker Registered'); });
+			}
+	</script>
+		<!-- ここまで -->
 </head>
-<!-- 背景に画像を表示させる -->
+<!--　人数表示に関するコード　-->
 <body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
+
+    <!-- グラフを表示するためのCanvas要素 -->
+    <canvas id="myChart"></canvas>
 
     <div id="detailPeople">
         <!-- 小風呂の人数を表示する枠 -->
@@ -21,7 +36,7 @@
             <span>
                 <h2>小風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="small-bath-count" class="count"></p>
+                <p id="small-bath-count" class="count {{ small.color }}">{{ small.count }}</p>
             </span>
             <span class="ninn">
                 <h3>人</h3>
@@ -34,7 +49,7 @@
             <span>
                 <h2>大風呂</h2>
                 <!-- 人数表示に色のクラスを追加 -->
-                <p id="large-bath-count" class="count"></p>
+                <p id="large-bath-count" class="count {{ large.color }}">{{ large.count }}</p>
             </span>
             <span class="ninn">
                 <h3>人</h3>
@@ -43,52 +58,47 @@
         </div>
     </div>
 
-    <!-- JavaScriptを読み込みます -->
+    <!--予測をグラフ化するコード-->
     <script>
-        // サーバーから小風呂の人数を取得する関数（仮の実装）
-        function fetchSmallBathCount() {
-            // ここで実際のデータを取得する通信を行います
-            // この例では仮の数値を返します
-            return 2;
-        }
+        // バックエンドから取得したデータをJavaScriptの変数に代入
+        var timeLabels = ["16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
+        var peopleData = ["5", "3", "4", "6", "7", "2", "4", "8"];   /*仮の値*/
 
-        // サーバーから大風呂の人数を取得する関数（仮の実装）
-        function fetchLargeBathCount() {
-            // ここで実際のデータを取得する通信を行います
-            // この例では仮の数値を返します
-            return 7;
-        }
+        // Canvas要素を取得
+        var ctx = document.getElementById('myChart').getContext('2d');
 
-        // 小風呂と大風呂の人数を表示する関数
-        function displayBathCounts() {
-            const smallBathCount = fetchSmallBathCount(); // 小風呂の人数を取得
-            const largeBathCount = fetchLargeBathCount(); // 大風呂の人数を取得
+        // データセットの設定
+        var data = {
+            labels: timeLabels,
+            datasets: [{
+                label: '人数',
+                data: peopleData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 棒の背景色 (水色)
+                borderColor: 'rgba(0, 0, 0, 1)', // 棒の境界線の色 (黒色)
+                borderWidth: 1 // 棒の境界線の幅
+            }]
+        };
 
-            // HTMLに人数を表示し、条件に応じて数字の色を変更します
-            const smallBathCountElement = document.getElementById("small-bath-count");
-            smallBathCountElement.textContent = `${smallBathCount}`;
-            if (smallBathCount >= 0 && smallBathCount <= 2) {
-                smallBathCountElement.classList.add("green");
-            } else if (smallBathCount >= 3 && smallBathCount <= 4) {
-                smallBathCountElement.classList.add("yellow");
-            } else if (smallBathCount >= 5 && smallBathCount <= 6) {
-                smallBathCountElement.classList.add("red");
+        // グラフのオプション設定
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true // y軸を0から始める
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false // 凡例を非表示
+                }
             }
+        };
 
-            // HTMLに人数を表示し、条件に応じて数字の色を変更します
-            const largeBathCountElement = document.getElementById("large-bath-count");
-            largeBathCountElement.textContent = `${largeBathCount}`;
-            if (largeBathCount >= 0 && largeBathCount <= 3) {
-                largeBathCountElement.classList.add("green");
-            } else if (largeBathCount >= 4 && largeBathCount <= 6) {
-                largeBathCountElement.classList.add("yellow");
-            } else if (largeBathCount >= 7 && largeBathCount <= 8) {
-                largeBathCountElement.classList.add("red");
-            }
-        }
-
-        // ページが読み込まれたときに人数を表示
-        window.onload = displayBathCounts;
+        // グラフを描画
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
     </script>
 </body>
 </html>

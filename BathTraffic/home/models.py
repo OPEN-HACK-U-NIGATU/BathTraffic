@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+class Snapshot(models.Model):
+    small_number = models.PositiveIntegerField()
+    big_number = models.PositiveIntegerField()
+    time = models.DateTimeField(auto_now_add=True)
