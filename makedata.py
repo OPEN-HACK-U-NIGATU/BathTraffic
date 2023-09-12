@@ -1,39 +1,41 @@
 import sqlite3
 import random
+from datetime import datetime, timedelta
 
 # データベースに接続
 conn = sqlite3.connect('BathTraffic\db.sqlite3')
 cursor = conn.cursor()
 
-# テーブルの作成SQL文を定義
-create_table_sql = '''CREATE TABLE bath_number (
-                        id INTEGER PRIMARY KEY,
-                        month INTEGER NOT NULL,
-                        day INTEGER NOT NULL,
-                        hour INTEGER NOT NULL,
-                        small_number INTEGER NOT NULL,
-                        big_number INTEGER NOT NULL
-                    )'''
+# 削除したいテーブルの名前を指定してテーブルを削除
+table_name = 'bath_number'
+cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
 
-# テーブルの作成SQL文を実行
-cursor.execute(create_table_sql)
+# テーブルを作成
+cursor.execute('''CREATE TABLE IF NOT EXISTS bath_number (
+                    ds TEXT,
+                    big_number REAL,
+                    small_number REAL
+                )''')
 
 # トランザクションを開始
 conn.execute('BEGIN')
 
-# 1月から12月までの各月について繰り返し
-for month in range(1, 13):
-    # 各月の各日について繰り返し
-    for day in range(1, 32):
-        # 各時間帯の入場者数をランダムに生成（16:00から23:00まで）
-        for hour in range(16, 24):
-            small_number = random.randint(0, 10)  # 少人数用浴場の入場者数
-            big_number = random.randint(0, 20)   # 大人数用浴場の入場者数
+# 開始日時と終了日時を設定
+start_date = datetime(2020, 1, 10, 16, 0, 0)
+end_date = datetime(2022, 12, 26, 0, 0, 0)
 
-            # データを挿入
-            insert_sql = 'INSERT INTO bath_number (month, day, hour, small_number, big_number) VALUES (?, ?, ?, ?, ?)'
-            cursor.execute(insert_sql, (month, day, hour, small_number, big_number))
+# 1時間ごとのデータを生成して挿入
+delta = timedelta(hours=1)
+current_date = start_date
 
+while current_date < end_date:
+    if current_date.hour >= 16 and current_date.hour <= 23:
+        ds = current_date.strftime('%Y-%m-%d %H:%M:%S')
+        # ここでデータを生成（例：ランダムな浮動小数点数）
+        big_number = random.randint(0,15)  # ここでデータを生成するコードを追加
+        small_number = random.randint(0,8)
+        cursor.execute("INSERT INTO bath_number (ds, big_number, small_number) VALUES (?, ?, ?)", (ds, big_number, small_number))
+    current_date += delta
 
 # データベース接続のクローズ
 conn.commit()
