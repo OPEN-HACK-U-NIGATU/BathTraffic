@@ -42,7 +42,9 @@
             </span>
             
             <!-- グラフを表示するためのCanvas要素 -->
-            <canvas id="smallBathChart"></canvas>
+            <div class="canvas">
+                <canvas id="smallBathChart" style="background-color: white;"></canvas>
+            </div>
         </div>
 
         <!-- 大風呂の人数を表示する枠 -->
@@ -57,11 +59,76 @@
                 <p class="unit"></p>
             </span>
             <!-- グラフを表示するためのCanvas要素 -->
-            <canvas id="largeBathChart"></canvas>
+            <div class="canvas">
+                <canvas id="largeBathChart" style="background-color: white;"></canvas>
+            </div>
         </div>
     </div>
-    
-    <!-- 予測をグラフ化するコード -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script>
+        const sctx = document.getElementById('smallBathChart');
+        const smallBathChart = new Chart(sctx, {
+            type: 'bar',
+            data: {
+                labels: ["16時", "17時", "18時", "19時", "20時", "21時", "22時"],
+                datasets: [
+                    {
+                        label: '小風呂',
+                        data: [5, 9, 3, 12, 2, 6, 5],
+                        backgroundColor: "rgba(219,39,91,0.5)"
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            callback: function(value, index, values){
+                                return  value +  '人'
+                            }
+                        }
+                    }]
+                }
+            }
+        }
+        );
+        const lctx = document.getElementById('largeBathChart');
+        const largeBathChart = new Chart(lctx, {
+            type: 'bar',
+            data: {
+                labels: ["16時", "17時", "18時", "19時"],
+                datasets: [
+                    {
+                        label: '大風呂',
+                        data: [5, 9, 6, 12],
+                        backgroundColor: "rgba(219,39,91,0.5)"
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            callback: function(value, index, values){
+                                return  value +  '人'
+                            }
+                        }
+                    }]
+                }
+            }
+        }
+        );
+    </script>
+
+    <!-- 予測をグラフ化するコード
     <script>
         // Djangoから受け取ったデータをJavaScript変数に設定
         var timeLabels = JSON.parse('{{ time_labels|escapejs|safe }}');
@@ -131,6 +198,6 @@
             data: largeBathData,
             options: largeBathOptions
         });
-    </script>
+    </script>-->
 </body>
 </html>
