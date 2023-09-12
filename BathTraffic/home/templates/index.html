@@ -23,12 +23,10 @@
 	</script>
 		<!-- ここまで -->
 </head>
+
 <!--　人数表示に関するコード　-->
 <body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
-
-    <!-- グラフを表示するためのCanvas要素 -->
-    <canvas id="myChart"></canvas>
 
     <div id="detailPeople">
         <!-- 小風呂の人数を表示する枠 -->
@@ -42,6 +40,9 @@
                 <h3>人</h3>
                 <p class="unit"></p>
             </span>
+            
+            <!-- グラフを表示するためのCanvas要素 -->
+            <canvas id="smallBathChart"></canvas>
         </div>
 
         <!-- 大風呂の人数を表示する枠 -->
@@ -55,49 +56,79 @@
                 <h3>人</h3>
                 <p class="unit"></p>
             </span>
+            <!-- グラフを表示するためのCanvas要素 -->
+            <canvas id="largeBathChart"></canvas>
         </div>
     </div>
-
-    <!--予測をグラフ化するコード-->
+    <!-- 予測をグラフ化するコード -->
     <script>
-        // バックエンドから取得したデータをJavaScriptの変数に代入
-        var timeLabels = ["16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
-        var peopleData = ["5", "3", "4", "6", "7", "2", "4", "8"];   /*仮の値*/
+        // Djangoから受け取ったデータをJavaScript変数に設定
+        var timeLabels = JSON.parse('{{ time_labels|escapejs|safe }}');
+        var smallData = JSON.parse('{{ small_data|escapejs|safe }}');
+        var largeData = JSON.parse('{{ large_data|escapejs|safe }}');
 
-        // Canvas要素を取得
-        var ctx = document.getElementById('myChart').getContext('2d');
-
-        // データセットの設定
-        var data = {
+        // 小風呂用のグラフの設定
+        var smallBathCtx = document.getElementById('smallBathChart').getContext('2d');
+        var smallBathData = {
             labels: timeLabels,
             datasets: [{
                 label: '人数',
-                data: peopleData,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 棒の背景色 (水色)
-                borderColor: 'rgba(0, 0, 0, 1)', // 棒の境界線の色 (黒色)
-                borderWidth: 1 // 棒の境界線の幅
+                data: smallData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(0, 0, 0, 1)',
+                borderWidth: 1
             }]
         };
-
-        // グラフのオプション設定
-        var options = {
+    
+        var smallBathOptions = {
             scales: {
                 y: {
-                    beginAtZero: true // y軸を0から始める
+                    beginAtZero: true
                 }
             },
             plugins: {
                 legend: {
-                    display: false // 凡例を非表示
+                    display: false
                 }
             }
         };
-
-        // グラフを描画
-        var myChart = new Chart(ctx, {
+    
+        var smallBathChart = new Chart(smallBathCtx, {
             type: 'bar',
-            data: data,
-            options: options
+            data: smallBathData,
+            options: smallBathOptions
+        });
+    
+        // 大風呂用のグラフの設定
+        var largeBathCtx = document.getElementById('largeBathChart').getContext('2d');
+        var largeBathData = {
+            labels: timeLabels,
+            datasets: [{
+                label: '人数',
+                data: largeData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(0, 0, 0, 1)',
+                borderWidth: 1
+            }]
+        };
+    
+        var largeBathOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        };
+    
+        var largeBathChart = new Chart(largeBathCtx, {
+            type: 'bar',
+            data: largeBathData,
+            options: largeBathOptions
         });
     </script>
 </body>
