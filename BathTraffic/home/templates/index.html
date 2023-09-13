@@ -10,15 +10,21 @@
 
     <!-- cssファイルの読み込み -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-        <!-- PWAの実装 -->
-	<link rel="manifest" href="static/manifest.json">
+
+    <!-- Chart.jsのスクリプトを読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PWAの実装 -->
+	<link rel="manifest" href="{% static 'manifest.json' %}">
 	<script>
 		if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(function() { console.log('Service Worker Registered'); });
+            navigator.serviceWorker.register('/sw.js').then(function() { console.log('Service Worker Registered'); });
 			}
 	</script>
 		<!-- ここまで -->
 </head>
+
+<!--　人数表示に関するコード　-->
 <body background="{% static 'img/hinoki.jpg' %}">
     <h1>現在のお風呂の混雑状況</h1>
 
@@ -34,6 +40,11 @@
                 <h3>人</h3>
                 <p class="unit"></p>
             </span>
+            
+            <!-- グラフを表示するためのCanvas要素 -->
+            <div class="canvas">
+                <canvas id="smallBathChart" style="background-color: white;"></canvas>
+            </div>
         </div>
 
         <!-- 大風呂の人数を表示する枠 -->
@@ -47,7 +58,147 @@
                 <h3>人</h3>
                 <p class="unit"></p>
             </span>
+            <!-- グラフを表示するためのCanvas要素 -->
+            <div class="canvas">
+                <canvas id="largeBathChart" style="background-color: white;"></canvas>
+            </div>
         </div>
     </div>
+    <!-- グラフ表示に関するコード -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script>
+        const sctx = document.getElementById('smallBathChart');
+        const smallBathChart = new Chart(sctx, {
+            type: 'bar',
+            data: {
+                labels: ["16時", "17時", "18時", "19時", "20時", "21時", "22時", "23時"],
+                datasets: [
+                    {
+                        label: '小風呂',
+                        data: [5, 9, 3, 12, 2, 6, 5, 1],
+                        backgroundColor: "rgba(219,39,91,0.5)"
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            callback: function(value, index, values){
+                                return  value +  '人'
+                            }
+                        }
+                    }]
+                }
+            }
+        }
+        );
+        const lctx = document.getElementById('largeBathChart');
+        const largeBathChart = new Chart(lctx, {
+            type: 'bar',
+            data: {
+                labels: ["16時", "17時", "18時", "19時", "20時", "21時", "22時", "23時"],
+                datasets: [
+                    {
+                        label: '大風呂',
+                        data: [5, 9, 3, 12, 2, 6, 5, 1],
+                        backgroundColor: "rgba(219,39,91,0.5)"
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            callback: function(value, index, values){
+                                return  value +  '人'
+                            }
+                        }
+                    }]
+                }
+            }
+        }
+        );
+    </script>
+
+    <!-- 予測をグラフ化するコード
+    <script>
+        // Djangoから受け取ったデータをJavaScript変数に設定
+        var timeLabels = JSON.parse('{{ time_labels|escapejs|safe }}');
+        var smallData = JSON.parse('{{ small_data|escapejs|safe }}');
+        var largeData = JSON.parse('{{ large_data|escapejs|safe }}');
+
+        // 小風呂用のグラフの設定
+        var smallBathCtx = document.getElementById('smallBathChart').getContext('2d');
+        var smallBathData = {
+            labels: timeLabels,
+            datasets: [{
+                label: '人数',
+                data: smallData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(0, 0, 0, 1)',
+                borderWidth: 1
+            }]
+        };
+    
+        var smallBathOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        };
+    
+        var smallBathChart = new Chart(smallBathCtx, {
+            type: 'bar',
+            data: smallBathData,
+            options: smallBathOptions
+        });
+    
+        // 大風呂用のグラフの設定
+        var largeBathCtx = document.getElementById('largeBathChart').getContext('2d');
+        var largeBathData = {
+            labels: timeLabels,
+            datasets: [{
+                label: '人数',
+                data: largeData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(0, 0, 0, 1)',
+                borderWidth: 1
+            }]
+        };
+    
+        var largeBathOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        };
+    
+        var largeBathChart = new Chart(largeBathCtx, {
+            type: 'bar',
+            data: largeBathData,
+            options: largeBathOptions
+        });
+    </script>-->
 </body>
 </html>
