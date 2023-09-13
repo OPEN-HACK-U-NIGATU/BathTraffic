@@ -3,7 +3,7 @@ import random
 from datetime import datetime, timedelta
 
 # データベースに接続
-conn = sqlite3.connect('BathTraffic\db.sqlite3')
+conn = sqlite3.connect('db.sqlite3')
 cursor = conn.cursor()
 
 # 削除したいテーブルの名前を指定してテーブルを削除
