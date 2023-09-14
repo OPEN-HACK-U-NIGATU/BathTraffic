@@ -29,7 +29,7 @@ def home(request):
     small["color"] = small_color
 
     #ここから予測部分
-    conn = sqlite3.connect('BathTraffic/db.sqlite3')
+    conn = sqlite3.connect('db.sqlite3')
 
     query = 'SELECT * FROM bath_number;'
     df1 = pd.read_sql_query(query,conn)
@@ -72,7 +72,7 @@ def home(request):
     forecast1_json = forecast1[['ds', 'yhat']].to_json(orient='records', date_format='iso')
     forecast2_json = forecast2[['ds', 'yhat']].to_json(orient='records', date_format='iso')
 
-    print(forecast1_json)
+    
 
     return render(request, 'index.html', {
         "large": large,
