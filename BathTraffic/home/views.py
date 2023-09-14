@@ -4,6 +4,7 @@ import os
 import pandas as pd
 from prophet import Prophet
 import sqlite3
+from datetime import datetime, timedelta
 
 def home(request):
     # 簡単な色変更用のプログラムを追加しました。
@@ -48,10 +49,30 @@ def home(request):
     smallmodel.fit(df2)
 
     # 予測を生成
-    future1 = bigmodel.make_future_dataframe(periods=365*24,freq='H')  # 予測期間を指定
+    # 今日の日付を取得
+    now = datetime.now()
+
+    # 今日の16:00を開始時刻とし、23:00を終了時刻とする時間帯を生成
+    # start_time = today + timedelta(hours=16)
+    # end_time = today + timedelta(hours=23)
+    start_time = now.replace(hour=16, minute=0, second=0, microsecond=0)
+    end_time = now.replace(hour=23, minute=0, second=0, microsecond=0)
+    forecast_hours = (end_time - start_time).seconds // 3600 + 1
+
+     # 1時間ごとの日付を生成
+    date_list = [start_time + timedelta(hours=i) for i in range(forecast_hours)]
+    
+    # 予測期間を指定
+    future1 = pd.DataFrame({'ds': date_list})
+    # future1 = bigmodel.make_future_dataframe(periods=7,freq='H') 
+    # future1 = future1[(future1['ds'] >= start_time) & (future1['ds'] <= end_time)]
+    # future1['ds'] = pd.date_range(start=start_time,end=end_time,freq='H')
     future1.tail()
 
-    future2 = smallmodel.make_future_dataframe(periods=365*24,freq='H')  # 予測期間を指定(freq='H'で一時間ごとに予測)
+    future2 = pd.DataFrame({'ds': date_list})
+    # future2 = smallmodel.make_future_dataframe(periods=7,freq='H')
+    # future2 = future1[(future2['ds'] >= start_time) & (future2['ds'] <= end_time)] 
+    # future2['ds'] = pd.date_range(start=start_time,end=end_time,freq='H')
     future2.tail()
 
 
@@ -72,8 +93,7 @@ def home(request):
     forecast1_json = forecast1[['ds', 'yhat']].to_json(orient='records', date_format='iso')
     forecast2_json = forecast2[['ds', 'yhat']].to_json(orient='records', date_format='iso')
 
-    
-
+    print(forecast1_json)
     return render(request, 'index.html', {
         "large": large,
         "small": small,
