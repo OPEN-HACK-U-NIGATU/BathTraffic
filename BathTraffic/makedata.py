@@ -32,20 +32,20 @@ while current_date < end_date:
     if current_date.hour >= 16 and current_date.hour <= 18:
         ds = current_date.strftime('%Y-%m-%d %H:%M:%S')
         # ここでデータを生成（例：ランダムな浮動小数点数）
-        big_number = random.randint(1,5)  # ここでデータを生成するコードを追加
-        small_number = random.randint(1,3)
+        big_number = random.randint(4,9)  # ここでデータを生成するコードを追加
+        small_number = random.randint(3,6)
         cursor.execute("INSERT INTO bath_number (ds, big_number, small_number) VALUES (?, ?, ?)", (ds, big_number, small_number))
 
     elif current_date.hour >= 19 and current_date.hour <= 21:
         ds = current_date.strftime('%Y-%m-%d %H:%M:%S')
-        big_number = random.randint(6,9)
-        small_number = random.randint(3,5)
+        big_number = random.randint(9,15)
+        small_number = random.randint(6,8)
         cursor.execute("INSERT INTO bath_number (ds, big_number, small_number) VALUES (?, ?, ?)", (ds, big_number, small_number))
 
     elif current_date.hour >= 22 and current_date.hour <= 23:
         ds = current_date.strftime('%Y-%m-%d %H:%M:%S')
-        big_number = random.randint(0,3)
-        small_number = random.randint(0,2)
+        big_number = random.randint(0,4)
+        small_number = random.randint(0,3)
         cursor.execute("INSERT INTO bath_number (ds, big_number, small_number) VALUES (?, ?, ?)", (ds, big_number, small_number))
     current_date += delta
 
