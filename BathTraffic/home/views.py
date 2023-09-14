@@ -25,12 +25,28 @@ def home(request):
     large["color"] = large_color
     small["color"] = small_color
 
-    # For test Front-end
-    # return render(request, 'index.html', {
-    #     "large": large,
-    #     "small": small
-    # })
-    file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates/index.html')
-    with open(file_path, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-    return HttpResponse(html_content, content_type='text/html')
+    return render(request, 'index.html', {
+        "large": large,
+        "small": small
+    })
+
+'''
+#グラフ用の関数
+# views.py
+from django.shortcuts import render
+from .models import YourModel
+
+def chart_view(request):
+    # データベースから時間帯と人数を取得する処理
+    time_labels = ["16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]  # 時間帯のラベルリスト
+    small_data = ["2", "3", "4", "5", "6", "7", "8", "9"]   # 小風呂の人数データ
+    large_data = ["2", "3", "4", "5", "6", "7", "8", "9"]   # 大風呂の人数データ
+
+    context = {
+        'time_labels': time_labels,
+        'small_data': small_data,
+        'large_data': large_data,
+    }
+
+    return render(request, 'index.html', context)
+'''
