@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import os
 import pandas as pd
 from prophet import Prophet
 import sqlite3
+import cv2
+from django.views.decorators.csrf import csrf_exempt
 
 def home(request):
     # 簡単な色変更用のプログラムを追加しました。
@@ -72,7 +74,7 @@ def home(request):
     forecast1_json = forecast1[['ds', 'yhat']].to_json(orient='records', date_format='iso')
     forecast2_json = forecast2[['ds', 'yhat']].to_json(orient='records', date_format='iso')
 
-    
+
 
     return render(request, 'index.html', {
         "large": large,
@@ -101,3 +103,15 @@ def chart_view(request):
 
     return render(request, 'index.html', context)
 '''
+
+@csrf_exempt
+def get_img(request):
+    if request.method == "POST":
+        image = request.FILES["image"]
+        image_path = r"C:\Users\akira\OneDrive\画像\test.jpg"
+        with open(image_path, "wb") as f:
+            for chunk in image.chunks():
+                f.write(chunk)
+        return JsonResponse({"status": "OK"})
+    else:
+        return JsonResponse({"status": "error"})
