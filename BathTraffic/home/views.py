@@ -21,7 +21,7 @@ def home(request):
         small_color = "yellow"
     else:
         small_color = "red"
-        
+
     large["color"] = large_color
     small["color"] = small_color
 
