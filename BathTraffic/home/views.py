@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import os
 
+
 def home(request):
     # 簡単な色変更用のプログラムを追加しました。
     large = {"count": 7}

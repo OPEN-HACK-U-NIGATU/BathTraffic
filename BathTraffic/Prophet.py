@@ -23,6 +23,8 @@ future.tail()
 forecast = model.predict(future)
 forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
 
+
+
 fig1 = model.plot(forecast)
 
 fig1.show()
