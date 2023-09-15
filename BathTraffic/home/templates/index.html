@@ -74,9 +74,9 @@
                 labels: ["16時", "17時", "18時", "19時", "20時", "21時", "22時", "23時"],
                 datasets: [
                     {
-                        label: '小風呂',
-                        data: [5, 9, 3, 12, 2, 6, 5, 1],
-                        backgroundColor: "rgba(219,39,91,0.5)"
+                        label: '入湯予測：小風呂',
+                        data: {{ forecastS }},
+                        backgroundColor: "rgba(50, 39, 230, 0.5)"
                     }
                 ]
             },
@@ -104,9 +104,9 @@
                 labels: ["16時", "17時", "18時", "19時", "20時", "21時", "22時", "23時"],
                 datasets: [
                     {
-                        label: '大風呂',
-                        data: [5, 9, 3, 12, 2, 6, 5, 1],
-                        backgroundColor: "rgba(219,39,91,0.5)"
+                        label: '入湯予測：大風呂',
+                        data: {{ forecastL }},
+                        backgroundColor: "rgba(219, 39, 91, 0.5)"
                     }
                 ]
             },

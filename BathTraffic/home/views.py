@@ -5,6 +5,10 @@ import pandas as pd
 from prophet import Prophet
 from django.views.decorators.csrf import csrf_exempt
 from google.cloud import vision
+from django.http import JsonResponse
+import os
+import sqlite3
+import ast
 
 def home(request):
     # 簡単な色変更用のプログラムを追加しました。
@@ -29,57 +33,37 @@ def home(request):
     large["color"] = large_color
     small["color"] = small_color
 
-    #ここから予測部分
+    #予測情報
+    # データベースに接続
     conn = sqlite3.connect('db.sqlite3')
+    # カーソルを作成
+    cursor = conn.cursor()
+    # SQLクエリを実行
+    cursor.execute('SELECT big_forecast_json FROM forecast_data;')
+    forecast1_json = cursor.fetchall()
 
-    query = 'SELECT * FROM bath_number;'
-    df1 = pd.read_sql_query(query,conn)
-    df2 = pd.read_sql_query(query,conn)
+    cursor.execute('SELECT small_forecast_json FROM forecast_data;')
+    forecast2_json = cursor.fetchall()
 
-    # Prophetモデルの初期化
-    bigmodel = Prophet()
-    smallmodel = Prophet()
+    # クエリの後片付け
+    cursor.close()
+    conn.close()
 
-    # データのカラム名をds（日付）とy（目的変数）に変更
-    df1.rename(columns={'ds': 'ds', 'big_number': 'y'}, inplace=True)
-    df2.rename(columns={'ds': 'ds', 'small_number': 'y'}, inplace=True)
-
-    # モデルにデータをフィット
-    bigmodel.fit(df1)
-    smallmodel.fit(df2)
-
-    # 予測を生成
-    future1 = bigmodel.make_future_dataframe(periods=365*24,freq='H')  # 予測期間を指定
-    future1.tail()
-
-    future2 = smallmodel.make_future_dataframe(periods=365*24,freq='H')  # 予測期間を指定(freq='H'で一時間ごとに予測)
-    future2.tail()
-
-
-    forecast1 = bigmodel.predict(future1)
-    forecast1[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
-
-    forecast2 = smallmodel.predict(future2)
-    forecast2[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
-
-    # fig1 = bigmodel.plot_components(forecast1)
-    # fig2 = smallmodel.plot_components(forecast2)
-
-    # fig1.show()
-    # fig2.show()
-    # input("Press Enter to close the plot...")
-
-    # 予測結果をJSON形式に変換
-    forecast1_json = forecast1[['ds', 'yhat']].to_json(orient='records', date_format='iso')
-    forecast2_json = forecast2[['ds', 'yhat']].to_json(orient='records', date_format='iso')
-
-
+    forecast1_list = ast.literal_eval(forecast1_json[0][0])
+    forecast2_list = ast.literal_eval(forecast2_json[0][0])
+    # return JsonResponse(forecast1_list, safe=False)
+    forecastS = []
+    forecastL = []
+    for row in forecast1_list:
+        forecastL.append(row['yhat'])
+    for row in forecast2_list:
+        forecastS.append(row['yhat'])
 
     return render(request, 'index.html', {
         "large": large,
         "small": small,
-        "forecast1_json":forecast1_json,
-        "forecast2_json":forecast2_json,
+        "forecastS": forecastS,
+        "forecastL": forecastL,
     })
 
 '''
