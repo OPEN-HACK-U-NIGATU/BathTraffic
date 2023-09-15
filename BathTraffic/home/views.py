@@ -17,15 +17,15 @@ def home(request):
     large_color = ""
     small_color = ""
 
-    if large["count"] >= 0 and large["count"] < 4:
+    if large["count"] >= 0 and large["count"] < 5:
         large_color = "green"
-    elif large["count"] >= 4 and large["count"] < 7:
+    elif large["count"] >= 5 and large["count"] < 10:
         large_color = "yellow"
     else:
         large_color = "red"
-    if small["count"] >= 0 and small["count"] < 3:
+    if small["count"] >= 0 and small["count"] < 4:
         small_color = "green"
-    elif small["count"] >= 3 and small["count"] < 5:
+    elif small["count"] >= 4 and small["count"] < 6:
         small_color = "yellow"
     else:
         small_color = "red"
