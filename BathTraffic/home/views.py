@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse
 import os
 import sqlite3
+import ast
+
 def home(request):
     # 簡単な色変更用のプログラムを追加しました。
     large = {"count": 7}
@@ -41,12 +43,21 @@ def home(request):
     cursor.close()
     conn.close()
 
+    forecast1_list = ast.literal_eval(forecast1_json[0][0])
+    forecast2_list = ast.literal_eval(forecast2_json[0][0])
+    # return JsonResponse(forecast1_list, safe=False)
+    forecastS = []
+    forecastL = []
+    for row in forecast1_list:
+        forecastL.append(row['yhat'])
+    for row in forecast2_list:
+        forecastS.append(row['yhat'])
 
     return render(request, 'index.html', {
         "large": large,
         "small": small,
-        "forecast1_json":forecast1_json,
-        "forecast2_json":forecast2_json,
+        "forecastS": forecastS,
+        "forecastL": forecastL,
     })
 
 '''
