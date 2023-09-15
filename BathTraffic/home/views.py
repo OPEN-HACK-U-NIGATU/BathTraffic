@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-import os
+from django.http import JsonResponse
+import os, sqlite3, datetime
 import pandas as pd
 from prophet import Prophet
-import sqlite3
-import cv2
 from django.views.decorators.csrf import csrf_exempt
+from google.cloud import vision
 
 def home(request):
     # 簡単な色変更用のプログラムを追加しました。
@@ -104,14 +103,37 @@ def chart_view(request):
     return render(request, 'index.html', context)
 '''
 
+def localize_objects(path):
+    client = vision.ImageAnnotatorClient()
+
+    with open(path, "rb") as image_file:
+        content = image_file.read()
+    image = vision.Image(content=content)
+
+    objects = client.object_localization(image=image).localized_object_annotations
+
+    c = 0
+
+    for object_ in objects:
+        if object_.name == "Shoe":
+            c += 1
+
+    return c
+
+count = 0
+
 @csrf_exempt
 def get_img(request):
     if request.method == "POST":
+        global count
         image = request.FILES["image"]
-        image_path = r"C:\Users\akira\OneDrive\画像\test.jpg"
+        now = datetime.datetime.now()
+        image_path = os.path.join("home/image", now.strftime("%Y%m%d_%H%M") + ".jpg")
         with open(image_path, "wb") as f:
             for chunk in image.chunks():
                 f.write(chunk)
+
+        count = localize_objects(image_path)
         return JsonResponse({"status": "OK"})
     else:
         return JsonResponse({"status": "error"})
